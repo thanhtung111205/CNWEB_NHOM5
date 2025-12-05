@@ -1,6 +1,4 @@
 <?php
-<<<<<<< HEAD
-
 session_start();
 
 ini_set('display_errors', 1);
@@ -12,23 +10,23 @@ define('CONTROLLER_PATH', ROOT_PATH . '/controllers');
 define('MODEL_PATH', ROOT_PATH . '/models');
 define('VIEW_PATH', ROOT_PATH . '/views');
 
-// Tự động detect base URL
+// Detect base URL
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
 $host = $_SERVER['HTTP_HOST'];
 $script_name = dirname($_SERVER['SCRIPT_NAME']);
 define('BASE_URL', $protocol . "://" . $host . $script_name);
 
-// XỬ LÝ ROUTE
+// ROUTE
 $request_uri = trim($_SERVER['REQUEST_URI'], '/');
 
-// Tách query string
+// Query string
 $query_string = '';
 if (strpos($request_uri, '?') !== false) {
     list($request_uri, $query_string) = explode('?', $request_uri, 2);
     parse_str($query_string, $_GET);
 }
 
-// Loại bỏ base path: BaiTH_Nhom5/onlinecourse hoặc onlinecourse
+// Remove base path
 $possible_bases = ['BaiTH_Nhom5/onlinecourse', 'onlinecourse'];
 foreach ($possible_bases as $base) {
     if (strpos($request_uri, $base) === 0) {
@@ -37,20 +35,18 @@ foreach ($possible_bases as $base) {
     }
 }
 
-// Nếu request_uri rỗng, set về home
+// Default route
 if (empty($request_uri)) {
     $request_uri = 'home/index';
 }
 
 $parts = explode('/', $request_uri);
 
-// Controller
+// Controller & Action
 $controller_name = !empty($parts[0]) ? ucfirst($parts[0]) . 'Controller' : 'HomeController';
-
-// Action
 $action_name = $parts[1] ?? 'index';
 
-// Param (vd: /course/detail/5) - nếu có thì đưa vào $_GET['id']
+// Param (vd: /course/detail/5)
 if (isset($parts[2]) && !empty($parts[2])) {
     $_GET['id'] = $parts[2];
 }
@@ -64,9 +60,7 @@ if (file_exists($controller_file)) {
         $controller = new $controller_name();
 
         if (method_exists($controller, $action_name)) {
-            // Gọi action, các param đã được set vào $_GET
             $controller->$action_name();
-
         } else {
             http_response_code(404);
             echo "404 Not Found: Action '{$action_name}' not found.";
@@ -78,27 +72,19 @@ if (file_exists($controller_file)) {
     }
 
 } else {
-    http_response_code(404);
-    echo "404 Not Found: Controller file '{$controller_name}.php' not found.";
+    // Nếu không tìm thấy file controller, fallback cho AuthController
+    if ($controller_name === "AuthController") {
+        require_once CONTROLLER_PATH . "/AuthController.php";
+        $ctl = new AuthController();
+        switch ($action_name) {
+            case "loginPage": $ctl->loginPage(); break;
+            case "login": $ctl->login(); break;
+            case "logout": $ctl->logout(); break;
+            default: echo "Không tìm thấy action trong AuthController"; break;
+        }
+    } else {
+        http_response_code(404);
+        echo "404 Not Found: Controller file '{$controller_name}.php' not found.";
+    }
 }
 ?>
-=======
-$controller = $_GET["controller"] ?? "auth";
-$action = $_GET["action"] ?? "loginPage";
-
-switch ($controller) {
-
-    case "auth":
-        require "./controllers/AuthController.php";
-        $ctl = new AuthController();
-
-        if ($action == "loginPage") $ctl->loginPage();
-        if ($action == "login") $ctl->login();
-        if ($action == "logout") $ctl->logout();
-        break;
-    default:
-        echo "Không tìm thấy controller";
-        break;
-    // các controller khác...
-}
->>>>>>> 000e82de846b3fe8921c7103e24587b3d91b64e1
