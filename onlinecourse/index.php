@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 
 session_start();
 
@@ -81,3 +82,23 @@ if (file_exists($controller_file)) {
     echo "404 Not Found: Controller file '{$controller_name}.php' not found.";
 }
 ?>
+=======
+$controller = $_GET["controller"] ?? "auth";
+$action = $_GET["action"] ?? "loginPage";
+
+switch ($controller) {
+
+    case "auth":
+        require "./controllers/AuthController.php";
+        $ctl = new AuthController();
+
+        if ($action == "loginPage") $ctl->loginPage();
+        if ($action == "login") $ctl->login();
+        if ($action == "logout") $ctl->logout();
+        break;
+    default:
+        echo "Không tìm thấy controller";
+        break;
+    // các controller khác...
+}
+>>>>>>> 000e82de846b3fe8921c7103e24587b3d91b64e1

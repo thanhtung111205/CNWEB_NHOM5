@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 
 require_once CONFIG_PATH . '/Database.php';
 require_once MODEL_PATH . '/Course.php';
@@ -26,3 +27,10 @@ class HomeController {
         require_once VIEW_PATH . '/home/index.php';
     }
 }
+=======
+class HomeController {
+    public function index() {
+        echo "<h1>Trang chủ</h1>";
+    }
+}
+>>>>>>> 000e82de846b3fe8921c7103e24587b3d91b64e1
