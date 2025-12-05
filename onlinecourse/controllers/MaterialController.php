@@ -21,8 +21,8 @@ class MaterialController {
     // Hiển thị form upload tài liệu
     public function upload() 
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -38,7 +38,7 @@ class MaterialController {
         $lesson = $this->lesson->get($lesson_id);
         if ($lesson) {
             $course = $this->course->get($lesson['course_id']);
-            if (!$course || $course['instructor_id'] != $_SESSION['user_id']) {
+            if (!$course || $course['instructor_id'] != $_SESSION['user']['id']) {
                 echo "Bạn không có quyền upload tài liệu cho bài học này!";
                 return;
             }
@@ -53,13 +53,13 @@ class MaterialController {
     // Xử lý upload tài liệu
     public function store()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header("Location: /onlinecourse/");
+            header("Location: " . BASE_URL);
             exit;
         }
 
@@ -68,14 +68,14 @@ class MaterialController {
 
         if (!$lesson_id || !$course_id) {
             $_SESSION['error'] = "Thiếu thông tin!";
-            header("Location: /onlinecourse/lesson/manage?course_id=" . $course_id);
+            header("Location: " . BASE_URL . "/lesson/manage?course_id=" . $course_id);
             exit;
         }
 
         // Validate file upload
         if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
             $_SESSION['error'] = "Vui lòng chọn file để upload!";
-            header("Location: /onlinecourse/material/upload?lesson_id=" . $lesson_id . "&course_id=" . $course_id);
+            header("Location: " . BASE_URL . "/material/upload?lesson_id=" . $lesson_id . "&course_id=" . $course_id);
             exit;
         }
 
@@ -87,7 +87,7 @@ class MaterialController {
 
         if (!in_array($ext, $allowed_types)) {
             $_SESSION['error'] = "File không hợp lệ! Chỉ chấp nhận: " . implode(', ', $allowed_types);
-            header("Location: /onlinecourse/material/upload?lesson_id=" . $lesson_id . "&course_id=" . $course_id);
+            header("Location: " . BASE_URL . "/material/upload?lesson_id=" . $lesson_id . "&course_id=" . $course_id);
             exit;
         }
 
@@ -95,7 +95,7 @@ class MaterialController {
         $max_size = 10 * 1024 * 1024; // 10MB
         if ($file['size'] > $max_size) {
             $_SESSION['error'] = "File quá lớn! Kích thước tối đa là 10MB.";
-            header("Location: /onlinecourse/material/upload?lesson_id=" . $lesson_id . "&course_id=" . $course_id);
+            header("Location: " . BASE_URL . "/material/upload?lesson_id=" . $lesson_id . "&course_id=" . $course_id);
             exit;
         }
 
@@ -120,7 +120,7 @@ class MaterialController {
             $data = [
                 'lesson_id' => $lesson_id,
                 'filename' => $original_name,
-                'file_path' => "/onlinecourse/assets/uploads/materials/" . $new_name,
+                'file_path' => BASE_URL . "/assets/uploads/materials/" . $new_name,
                 'file_type' => $ext
             ];
 
@@ -136,15 +136,15 @@ class MaterialController {
             $_SESSION['error'] = "Có lỗi khi upload file!";
         }
 
-        header("Location: /onlinecourse/lesson/manage?course_id=" . $course_id);
+        header("Location: " . BASE_URL . "/lesson/manage?course_id=" . $course_id);
         exit;
     }
 
     // Xóa tài liệu
     public function delete()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -153,7 +153,7 @@ class MaterialController {
 
         if (!$id || !$course_id) {
             $_SESSION['error'] = "Thiếu thông tin!";
-            header("Location: /onlinecourse/lesson/manage?course_id=" . $course_id);
+            header("Location: " . BASE_URL . "/lesson/manage?course_id=" . $course_id);
             exit;
         }
 
@@ -162,7 +162,7 @@ class MaterialController {
         
         if ($material) {
             // Xóa file vật lý
-            $file_path = ROOT_PATH . str_replace("/onlinecourse", "", $material['file_path']);
+            $file_path = str_replace(BASE_URL, ROOT_PATH, $material['file_path']);
             if (file_exists($file_path)) {
                 unlink($file_path);
             }
@@ -175,7 +175,7 @@ class MaterialController {
             }
         }
 
-        header("Location: /onlinecourse/lesson/manage?course_id=" . $course_id);
+        header("Location: " . BASE_URL . "/lesson/manage?course_id=" . $course_id);
         exit;
     }
 }

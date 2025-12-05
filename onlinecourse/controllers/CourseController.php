@@ -37,12 +37,12 @@ class CourseController {
     // Giảng viên – Danh sách khóa học
     public function manage()
     {
-        if (!isset($_SESSION['user_id'])) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user'])) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
-        $instructorId = $_SESSION['user_id'];
+        $instructorId = $_SESSION['user']['id'];
 
         $courses = $this->course->getByInstructor($instructorId);
 
@@ -52,8 +52,8 @@ class CourseController {
     // Form tạo khóa học
     public function create()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -69,8 +69,8 @@ class CourseController {
     // Submit tạo khóa học
     public function store()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -85,45 +85,45 @@ class CourseController {
         // Kiểm tra các trường bắt buộc
         if (empty($title)) {
             $_SESSION['error'] = "Tiêu đề khóa học không được để trống!";
-            header("Location: /onlinecourse/course/create");
+            header("Location: " . BASE_URL . "/course/create");
             exit;
         }
 
         if (empty($description)) {
             $_SESSION['error'] = "Mô tả khóa học không được để trống!";
-            header("Location: /onlinecourse/course/create");
+            header("Location: " . BASE_URL . "/course/create");
             exit;
         }
 
         if ($category_id <= 0) {
             $_SESSION['error'] = "Vui lòng chọn danh mục!";
-            header("Location: /onlinecourse/course/create");
+            header("Location: " . BASE_URL . "/course/create");
             exit;
         }
 
         if ($price < 0) {
             $_SESSION['error'] = "Giá khóa học không hợp lệ!";
-            header("Location: /onlinecourse/course/create");
+            header("Location: " . BASE_URL . "/course/create");
             exit;
         }
 
         if ($duration_weeks <= 0) {
             $_SESSION['error'] = "Thời lượng khóa học phải lớn hơn 0!";
-            header("Location: /onlinecourse/course/create");
+            header("Location: " . BASE_URL . "/course/create");
             exit;
         }
 
         $allowed_levels = ['Beginner', 'Intermediate', 'Advanced'];
         if (!in_array($level, $allowed_levels)) {
             $_SESSION['error'] = "Cấp độ khóa học không hợp lệ!";
-            header("Location: /onlinecourse/course/create");
+            header("Location: " . BASE_URL . "/course/create");
             exit;
         }
 
         $data = [
             "title" => $title,
             "description" => $description,
-            "instructor_id" => $_SESSION['user_id'],
+            "instructor_id" => $_SESSION['user']['id'],
             "category_id" => $category_id,
             "price" => $price,
             "duration_weeks" => $duration_weeks,
@@ -138,7 +138,7 @@ class CourseController {
 
             if (!in_array($image_ext, $allowed_image_types)) {
                 $_SESSION['error'] = "File ảnh không hợp lệ! Chỉ chấp nhận: " . implode(', ', $allowed_image_types);
-                header("Location: /onlinecourse/course/create");
+                header("Location: " . BASE_URL . "/course/create");
                 exit;
             }
 
@@ -146,7 +146,7 @@ class CourseController {
             $max_size = 5 * 1024 * 1024;
             if ($_FILES['image']['size'] > $max_size) {
                 $_SESSION['error'] = "File ảnh quá lớn! Kích thước tối đa là 5MB.";
-                header("Location: /onlinecourse/course/create");
+                header("Location: " . BASE_URL . "/course/create");
                 exit;
             }
 
@@ -164,7 +164,7 @@ class CourseController {
                 $data["image"] = $fileName;
             } else {
                 $_SESSION['error'] = "Có lỗi khi upload ảnh!";
-                header("Location: /onlinecourse/course/create");
+                header("Location: " . BASE_URL . "/course/create");
                 exit;
             }
         }
@@ -175,14 +175,14 @@ class CourseController {
             $_SESSION['error'] = "Có lỗi xảy ra khi tạo khóa học!";
         }
 
-        header("Location: /onlinecourse/instructor/course/manage");
+        header("Location: " . BASE_URL . "/instructor/my_courses");
     }
 
     // Form sửa khóa học
     public function edit()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -201,7 +201,7 @@ class CourseController {
         }
 
         // Kiểm tra quyền sở hữu
-        if ($course['instructor_id'] != $_SESSION['user_id']) {
+        if ($course['instructor_id'] != $_SESSION['user']['id']) {
             echo "Bạn không có quyền chỉnh sửa khóa học này!";
             return;
         }
@@ -218,8 +218,8 @@ class CourseController {
     // Submit cập nhật
     public function update()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -227,7 +227,7 @@ class CourseController {
 
         if ($id <= 0) {
             $_SESSION['error'] = "ID khóa học không hợp lệ!";
-            header("Location: /onlinecourse/instructor/course/manage");
+            header("Location: " . BASE_URL . "/instructor/my_courses");
             exit;
         }
 
@@ -235,14 +235,14 @@ class CourseController {
 
         if (!$course) {
             $_SESSION['error'] = "Khóa học không tồn tại!";
-            header("Location: /onlinecourse/instructor/course/manage");
+            header("Location: " . BASE_URL . "/instructor/my_courses");
             exit;
         }
 
         // Kiểm tra quyền
-        if ($course['instructor_id'] != $_SESSION['user_id']) {
+        if ($course['instructor_id'] != $_SESSION['user']['id']) {
             $_SESSION['error'] = "Bạn không có quyền chỉnh sửa khóa học này!";
-            header("Location: /onlinecourse/instructor/course/manage");
+            header("Location: " . BASE_URL . "/instructor/my_courses");
             exit;
         }
 
@@ -256,38 +256,38 @@ class CourseController {
 
         if (empty($title)) {
             $_SESSION['error'] = "Tiêu đề khóa học không được để trống!";
-            header("Location: /onlinecourse/course/edit?id=" . $id);
+            header("Location: " . BASE_URL . "/course/edit?id=" . $id);
             exit;
         }
 
         if (empty($description)) {
             $_SESSION['error'] = "Mô tả khóa học không được để trống!";
-            header("Location: /onlinecourse/course/edit?id=" . $id);
+            header("Location: " . BASE_URL . "/course/edit?id=" . $id);
             exit;
         }
 
         if ($category_id <= 0) {
             $_SESSION['error'] = "Vui lòng chọn danh mục!";
-            header("Location: /onlinecourse/course/edit?id=" . $id);
+            header("Location: " . BASE_URL . "/course/edit?id=" . $id);
             exit;
         }
 
         if ($price < 0) {
             $_SESSION['error'] = "Giá khóa học không hợp lệ!";
-            header("Location: /onlinecourse/course/edit?id=" . $id);
+            header("Location: " . BASE_URL . "/course/edit?id=" . $id);
             exit;
         }
 
         if ($duration_weeks <= 0) {
             $_SESSION['error'] = "Thời lượng khóa học phải lớn hơn 0!";
-            header("Location: /onlinecourse/course/edit?id=" . $id);
+            header("Location: " . BASE_URL . "/course/edit?id=" . $id);
             exit;
         }
 
         $allowed_levels = ['Beginner', 'Intermediate', 'Advanced'];
         if (!in_array($level, $allowed_levels)) {
             $_SESSION['error'] = "Cấp độ khóa học không hợp lệ!";
-            header("Location: /onlinecourse/course/edit?id=" . $id);
+            header("Location: " . BASE_URL . "/course/edit?id=" . $id);
             exit;
         }
 
@@ -309,7 +309,7 @@ class CourseController {
 
             if (!in_array($image_ext, $allowed_image_types)) {
                 $_SESSION['error'] = "File ảnh không hợp lệ! Chỉ chấp nhận: " . implode(', ', $allowed_image_types);
-                header("Location: /onlinecourse/course/edit?id=" . $id);
+                header("Location: " . BASE_URL . "/course/edit?id=" . $id);
                 exit;
             }
 
@@ -317,7 +317,7 @@ class CourseController {
             $max_size = 5 * 1024 * 1024;
             if ($_FILES['image']['size'] > $max_size) {
                 $_SESSION['error'] = "File ảnh quá lớn! Kích thước tối đa là 5MB.";
-                header("Location: /onlinecourse/course/edit?id=" . $id);
+                header("Location: " . BASE_URL . "/course/edit?id=" . $id);
                 exit;
             }
 
@@ -348,14 +348,14 @@ class CourseController {
             $_SESSION['error'] = "Có lỗi xảy ra khi cập nhật khóa học!";
         }
 
-        header("Location: /onlinecourse/instructor/course/manage");
+        header("Location: " . BASE_URL . "/instructor/my_courses");
     }
 
     // Xóa khóa học
     public function delete()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -363,7 +363,7 @@ class CourseController {
 
         if (!$id) {
             $_SESSION['error'] = "ID khóa học không hợp lệ!";
-            header("Location: /onlinecourse/instructor/course/manage");
+            header("Location: " . BASE_URL . "/instructor/my_courses");
             exit;
         }
 
@@ -371,14 +371,14 @@ class CourseController {
 
         if (!$course) {
             $_SESSION['error'] = "Khóa học không tồn tại!";
-            header("Location: /onlinecourse/instructor/course/manage");
+            header("Location: " . BASE_URL . "/instructor/my_courses");
             exit;
         }
 
         // Kiểm tra quyền
-        if ($course['instructor_id'] != $_SESSION['user_id']) {
+        if ($course['instructor_id'] != $_SESSION['user']['id']) {
             $_SESSION['error'] = "Bạn không có quyền xóa khóa học này!";
-            header("Location: /onlinecourse/instructor/course/manage");
+            header("Location: " . BASE_URL . "/instructor/my_courses");
             exit;
         }
 
@@ -396,6 +396,6 @@ class CourseController {
             $_SESSION['error'] = "Có lỗi xảy ra khi xóa khóa học!";
         }
 
-        header("Location: /onlinecourse/instructor/course/manage");
+        header("Location: " . BASE_URL . "/instructor/my_courses");
     }
 }

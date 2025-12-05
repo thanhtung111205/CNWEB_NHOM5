@@ -21,8 +21,8 @@ class LessonController {
     // Quản lý bài học theo khóa học
     public function manage()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -35,7 +35,7 @@ class LessonController {
 
         // Kiểm tra quyền sở hữu khóa học
         $course = $this->course->get($course_id);
-        if (!$course || $course['instructor_id'] != $_SESSION['user_id']) {
+        if (!$course || $course['instructor_id'] != $_SESSION['user']['id']) {
             echo "Bạn không có quyền quản lý khóa học này!";
             return;
         }
@@ -53,8 +53,8 @@ class LessonController {
     // Form tạo bài học
     public function create()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -67,7 +67,7 @@ class LessonController {
 
         // Kiểm tra quyền
         $course = $this->course->get($course_id);
-        if (!$course || $course['instructor_id'] != $_SESSION['user_id']) {
+        if (!$course || $course['instructor_id'] != $_SESSION['user']['id']) {
             echo "Bạn không có quyền thêm bài học cho khóa học này!";
             return;
         }
@@ -78,8 +78,8 @@ class LessonController {
     // Lưu bài học mới
     public function store()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -92,13 +92,13 @@ class LessonController {
         // Validate input
         if (empty($title)) {
             $_SESSION['error'] = "Tiêu đề bài học không được để trống!";
-            header("Location: /onlinecourse/lesson/create?course_id=" . $course_id);
+            header("Location: " . BASE_URL . "/lesson/create?course_id=" . $course_id);
             exit;
         }
 
         if (empty($content)) {
             $_SESSION['error'] = "Nội dung bài học không được để trống!";
-            header("Location: /onlinecourse/lesson/create?course_id=" . $course_id);
+            header("Location: " . BASE_URL . "/lesson/create?course_id=" . $course_id);
             exit;
         }
 
@@ -106,7 +106,7 @@ class LessonController {
         if (!empty($video_url)) {
             if (!filter_var($video_url, FILTER_VALIDATE_URL)) {
                 $_SESSION['error'] = "URL video không hợp lệ!";
-                header("Location: /onlinecourse/lesson/create?course_id=" . $course_id);
+                header("Location: " . BASE_URL . "/lesson/create?course_id=" . $course_id);
                 exit;
             }
         }
@@ -125,14 +125,14 @@ class LessonController {
             $_SESSION['error'] = "Có lỗi xảy ra khi thêm bài học!";
         }
 
-        header("Location: /onlinecourse/lesson/manage?course_id=" . $course_id);
+        header("Location: " . BASE_URL . "/lesson/manage?course_id=" . $course_id);
     }
 
     // Form sửa bài học
     public function edit()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -152,7 +152,7 @@ class LessonController {
 
         // Kiểm tra quyền
         $course = $this->course->get($lesson['course_id']);
-        if (!$course || $course['instructor_id'] != $_SESSION['user_id']) {
+        if (!$course || $course['instructor_id'] != $_SESSION['user']['id']) {
             echo "Bạn không có quyền chỉnh sửa bài học này!";
             return;
         }
@@ -163,8 +163,8 @@ class LessonController {
     // Cập nhật bài học
     public function update()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -178,13 +178,13 @@ class LessonController {
         // Validate input
         if (empty($title)) {
             $_SESSION['error'] = "Tiêu đề bài học không được để trống!";
-            header("Location: /onlinecourse/lesson/edit?id=" . $id);
+            header("Location: " . BASE_URL . "/lesson/edit?id=" . $id);
             exit;
         }
 
         if (empty($content)) {
             $_SESSION['error'] = "Nội dung bài học không được để trống!";
-            header("Location: /onlinecourse/lesson/edit?id=" . $id);
+            header("Location: " . BASE_URL . "/lesson/edit?id=" . $id);
             exit;
         }
 
@@ -192,7 +192,7 @@ class LessonController {
         if (!empty($video_url)) {
             if (!filter_var($video_url, FILTER_VALIDATE_URL)) {
                 $_SESSION['error'] = "URL video không hợp lệ!";
-                header("Location: /onlinecourse/lesson/edit?id=" . $id);
+                header("Location: " . BASE_URL . "/lesson/edit?id=" . $id);
                 exit;
             }
         }
@@ -211,14 +211,14 @@ class LessonController {
             $_SESSION['error'] = "Có lỗi xảy ra khi cập nhật bài học!";
         }
 
-        header("Location: /onlinecourse/lesson/manage?course_id=" . $course_id);
+        header("Location: " . BASE_URL . "/lesson/manage?course_id=" . $course_id);
     }
 
     // Xóa bài học
     public function delete()
     {
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 1) {
-            header("Location: /onlinecourse/auth/login");
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL . "/auth/loginPage");
             exit;
         }
 
@@ -234,7 +234,7 @@ class LessonController {
         $lesson = $this->lesson->get($id);
         if ($lesson) {
             $course = $this->course->get($lesson['course_id']);
-            if ($course && $course['instructor_id'] == $_SESSION['user_id']) {
+            if ($course && $course['instructor_id'] == $_SESSION['user']['id']) {
                 if ($this->lesson->delete($id)) {
                     $_SESSION['success'] = "Xóa bài học thành công!";
                 } else {
@@ -243,6 +243,6 @@ class LessonController {
             }
         }
 
-        header("Location: /onlinecourse/lesson/manage?course_id=" . $course_id);
+        header("Location: " . BASE_URL . "/lesson/manage?course_id=" . $course_id);
     }
 }
