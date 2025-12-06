@@ -15,6 +15,7 @@
             <a href="<?= BASE_URL ?>/auth/logout">Đăng xuất</a>
         <?php else: ?>
             <a href="<?= BASE_URL ?>/auth/loginPage">Đăng nhập</a>
+            <a href="<?= BASE_URL ?>/auth/registerPage">Đăng ký</a>
         <?php endif; ?>
     </nav>
 </header>

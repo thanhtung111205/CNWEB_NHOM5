@@ -25,6 +25,8 @@
         <button type="submit">Đăng nhập</button>
     </form>
 </div>
-
+<p>Bạn chưa có tài khoản? 
+    <a href="<?= BASE_URL ?>/auth/registerPage">Đăng ký ngay</a>
+</p>
 </body>
 </html>
