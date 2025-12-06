@@ -1,0 +1,90 @@
+.sidebar {
+    width: 100%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid #eee;
+}
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px;
+}
+.sidebar-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.sidebar-sub {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.course-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.course-img img {
+    width: 100%;
+    border-bottom: 1px solid #eee;
+}
+
+.course-info {
+    padding: 15px;
+}
+
+.badge {
+    background: #000;
+    color: white;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.course-name {
+    margin: 10px 0 5px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.course-meta {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.course-price .old {
+    text-decoration: line-through;
+    color: #bbb;
+}
+
+.course-price .free {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.course-price .sale {
+    color: #e63946;
+    font-weight: bold;
+}
+
+.btn-view {
+    display: inline-block;
+    margin-top: 10px;
+    color: #000;
+    font-weight: bold;
+    font-size: 14px;
+    text-decoration: none;
+}
