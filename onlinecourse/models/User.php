@@ -19,4 +19,20 @@ class User {
         $stmt->execute([$email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    // Tạo tài khoản mới
+   public function createUser($username, $email, $password, $fullname, $role) {
+    $query = "INSERT INTO " . $this->table . " (username, email, password, fullname, role)
+              VALUES (:username, :email, :password, :fullname, :role)";
+
+    $stmt = $this->conn->prepare($query);
+
+    $stmt->bindParam(":username", $username);
+    $stmt->bindParam(":email", $email);
+    $stmt->bindParam(":password", $password); // Không hash
+    $stmt->bindParam(":fullname", $fullname);
+    $stmt->bindParam(":role", $role);
+
+    return $stmt->execute();
+    
+    }
 }
