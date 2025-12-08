@@ -2,7 +2,7 @@
 
 <h1><?php echo $course['title']; ?></h1>
 
-<img src="/BaiTH_Nhom5/onlinecourse/assets/uploads/courses/<?php echo $course['image']; ?>" width="300">
+<img src="<?= BASE_URL ?>/assets/uploads/courses/<?php echo $course['image']; ?>" width="300">
 
 <p><?php echo $course['description']; ?></p>
 <p><strong>Giá:</strong> <?php echo $course['price']; ?> VND</p>

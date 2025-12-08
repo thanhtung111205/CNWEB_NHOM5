@@ -34,6 +34,39 @@ class CourseController {
         require_once VIEW_PATH . '/courses/detail.php';
     }
 
+    // Dashboard giảng viên
+    public function dashboard()
+    {
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL);
+            exit;
+        }
+
+        $instructorId = $_SESSION['user']['id'];
+        $courses = $this->course->getByInstructor($instructorId);
+        
+        // Debug
+        error_log("Dashboard - Instructor ID: " . $instructorId);
+        error_log("Dashboard - Courses count: " . count($courses));
+        error_log("Dashboard - Courses: " . print_r($courses, true));
+
+        require_once VIEW_PATH . '/instructor/dashboard.php';
+    }
+
+    // Danh sách khóa học của giảng viên
+    public function my_courses()
+    {
+        if (!isset($_SESSION['user']) || (int)$_SESSION['user']['role'] !== 1) {
+            header("Location: " . BASE_URL);
+            exit;
+        }
+
+        $instructorId = $_SESSION['user']['id'];
+        $courses = $this->course->getByInstructor($instructorId);
+
+        require_once VIEW_PATH . '/instructor/my_courses.php';
+    }
+
     // Giảng viên – Danh sách khóa học
     public function manage()
     {
@@ -175,7 +208,7 @@ class CourseController {
             $_SESSION['error'] = "Có lỗi xảy ra khi tạo khóa học!";
         }
 
-        header("Location: " . BASE_URL . "/instructor/my_courses");
+        header("Location: " . BASE_URL . "/course/my_courses");
     }
 
     // Form sửa khóa học
@@ -227,7 +260,7 @@ class CourseController {
 
         if ($id <= 0) {
             $_SESSION['error'] = "ID khóa học không hợp lệ!";
-            header("Location: " . BASE_URL . "/instructor/my_courses");
+            header("Location: " . BASE_URL . "/course/my_courses");
             exit;
         }
 
@@ -235,14 +268,14 @@ class CourseController {
 
         if (!$course) {
             $_SESSION['error'] = "Khóa học không tồn tại!";
-            header("Location: " . BASE_URL . "/instructor/my_courses");
+            header("Location: " . BASE_URL . "/course/my_courses");
             exit;
         }
 
         // Kiểm tra quyền
         if ($course['instructor_id'] != $_SESSION['user']['id']) {
             $_SESSION['error'] = "Bạn không có quyền chỉnh sửa khóa học này!";
-            header("Location: " . BASE_URL . "/instructor/my_courses");
+            header("Location: " . BASE_URL . "/course/my_courses");
             exit;
         }
 
@@ -348,7 +381,7 @@ class CourseController {
             $_SESSION['error'] = "Có lỗi xảy ra khi cập nhật khóa học!";
         }
 
-        header("Location: " . BASE_URL . "/instructor/my_courses");
+        header("Location: " . BASE_URL . "/course/my_courses");
     }
 
     // Xóa khóa học
@@ -363,7 +396,7 @@ class CourseController {
 
         if (!$id) {
             $_SESSION['error'] = "ID khóa học không hợp lệ!";
-            header("Location: " . BASE_URL . "/instructor/my_courses");
+            header("Location: " . BASE_URL . "/course/my_courses");
             exit;
         }
 
@@ -371,14 +404,14 @@ class CourseController {
 
         if (!$course) {
             $_SESSION['error'] = "Khóa học không tồn tại!";
-            header("Location: " . BASE_URL . "/instructor/my_courses");
+            header("Location: " . BASE_URL . "/course/my_courses");
             exit;
         }
 
         // Kiểm tra quyền
         if ($course['instructor_id'] != $_SESSION['user']['id']) {
             $_SESSION['error'] = "Bạn không có quyền xóa khóa học này!";
-            header("Location: " . BASE_URL . "/instructor/my_courses");
+            header("Location: " . BASE_URL . "/course/my_courses");
             exit;
         }
 
@@ -396,6 +429,6 @@ class CourseController {
             $_SESSION['error'] = "Có lỗi xảy ra khi xóa khóa học!";
         }
 
-        header("Location: " . BASE_URL . "/instructor/my_courses");
+        header("Location: " . BASE_URL . "/course/my_courses");
     }
 }
