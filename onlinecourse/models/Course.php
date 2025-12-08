@@ -7,7 +7,42 @@ class Course {
     public function __construct($db) {
         $this->conn = $db;
     }
+// ---------DÀNH CHO HỌC VIÊN (CHỨC NĂNG: TÌM KIẾM + LỌC)-------------
+    //1. Lấy khóa học theo category
+    public function getByCategory($categoryId) {
+        $stmt = $this->conn->prepare("SELECT * FROM courses WHERE category_id = ? ORDER BY title");
+        $stmt->execute([$categoryId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    // 2. Tìm kiếm khóa học theo tên
+    public function searchByTitle($keyword)
+{
+    $sql = "SELECT * FROM courses WHERE title LIKE ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute(["%$keyword%"]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+    //2. Tìm kiếm khóa học theo tên + category
+public function searchByTitleAndCategory($keyword, $categoryId)
+{
+    // Nếu có danh mục → CHỈ lọc theo danh mục, bỏ qua keyword
+    if (!empty($categoryId)) {
+        $sql = "SELECT * FROM courses WHERE category_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$categoryId]);
+    } 
+    else {
+        // Không có danh mục → lọc theo keyword
+        $sql = "SELECT * FROM courses WHERE title LIKE ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(["%$keyword%"]);
+    }
 
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+    // ------------------------HẾT PHẦN HỌC VIÊN--------------------------------
     // Lấy tất cả khóa học
     public function getAll() {
         $sql = "SELECT * FROM {$this->table} ORDER BY id DESC";
