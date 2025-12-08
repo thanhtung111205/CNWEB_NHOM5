@@ -1,35 +1,66 @@
 <?php
+require_once CONFIG_PATH."/Database.php";
 
 class Enrollment {
     private $conn;
-    private $table = "enrollments";
 
-    public function __construct($db) {
-        $this->conn = $db;
+    public function __construct() {
+        $db = new Database();
+        $this->conn = $db->connect();
     }
 
-    // Lấy danh sách khóa học của học viên
-    public function getByStudent($student_id) {
-        $sql = "SELECT e.*, c.title, c.description, c.image 
-                FROM {$this->table} e 
-                JOIN courses c ON e.course_id = c.id 
-                WHERE e.student_id = :student_id 
-                ORDER BY e.enrolled_at DESC";
-        
+    // ---- Đăng ký khóa học ----
+    public function registerCourse($courseId, $studentId) {
+        $sql = "INSERT INTO enrollments 
+                (course_id, student_id, enrolled_date, status, progress)
+                VALUES (?, ?, NOW(), 'active', 0)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":student_id", $student_id);
-        $stmt->execute();
+        return $stmt->execute([$courseId, $studentId]);
+    }
+
+    // ---- Kiểm tra đã đăng ký chưa ----
+    public function isEnrolled($studentId, $courseId) {
+        $sql = "SELECT COUNT(*) FROM enrollments 
+                WHERE student_id = ? AND course_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$studentId, $courseId]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    // ---- Lấy khóa học đã đăng ký ----
+    public function getMyCourses($studentId) {
+        $sql = "SELECT c.*, e.progress, e.status
+                FROM enrollments e
+                JOIN courses c ON e.course_id = c.id
+                WHERE e.student_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$studentId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Đăng ký khóa học
-    public function enroll($student_id, $course_id) {
-        $sql = "INSERT INTO {$this->table} (student_id, course_id) 
-                VALUES (:student_id, :course_id)";
-        
+    // ---- Lấy tiến độ học ----
+   public function getProgress($studentId)
+{
+    $sql = "SELECT 
+                c.id AS course_id,
+                c.title,
+                e.progress
+            FROM enrollments e
+            JOIN courses c ON e.course_id = c.id
+            WHERE e.student_id = ?";
+    
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$studentId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+    // ---- Cập nhật tiến độ (sau này dùng cho từng bài học) ----
+    public function updateProgress($courseId, $studentId, $progress) {
+        $sql = "UPDATE enrollments 
+                SET progress = ? 
+                WHERE course_id = ? AND student_id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":student_id", $student_id);
-        $stmt->bindParam(":course_id", $course_id);
-        return $stmt->execute();
+        return $stmt->execute([$progress, $courseId, $studentId]);
     }
 }
+?>

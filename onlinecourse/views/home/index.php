@@ -11,7 +11,7 @@
 
                     <h3><?php echo htmlspecialchars($c['title']); ?></h3>
                     <p><?php echo htmlspecialchars($c['description']); ?></p>
-                    <a href="/onlinecourse/course/detail/<?php echo $c['id']; ?>">Xem chi tiết</a>
+                    <a href="<?= BASE_URL ?>/course/detail&id=<?php echo $c['id']; ?>">Xem chi tiết</a>
                 </div>
             <?php endforeach; ?>
         </div>

@@ -2,7 +2,7 @@
 
 require_once CONFIG_PATH . '/Database.php';
 require_once MODEL_PATH . '/Course.php';
-
+require_once MODEL_PATH . '/Category.php';
 class CourseController {
     private $course;
 
@@ -12,11 +12,99 @@ class CourseController {
         $this->course = new Course($db);
     }
 
-    // Danh sách khóa học chung
+
+    //NHÓM CÁC CLASS FUNCTION DÀNH CHO HỌC VIÊN
+    // 1. Detail
+    public function detail_hocvien(){
+    $id = $_GET['id'] ?? null;
+
+    if (!$id) {
+        echo "Course ID missing!";
+        return;
+    }
+
+    // Lấy thông tin khóa học
+    $course = $this->course->get($id);
+
+    // Gọi model Lesson
+    require_once MODEL_PATH . '/Lesson.php';
+    $db = (new Database())->connect(); 
+    $lessonModel = new Lesson($db);
+    $lessons = $lessonModel->getByCourse($id);
+
+    // Kiểm tra học viên đã đăng ký chưa
+    require_once MODEL_PATH . '/Enrollment.php';
+    
+    $enrollmentModel = new Enrollment();
+    $isEnrolled = $enrollmentModel->isEnrolled($_SESSION['user']['id'], $id);
+
+    // Load view
+    include VIEW_PATH . '/courses/detail.php';
+}
+
+    //2. search()
+    public function search()
+{
+    $db = (new Database())->connect();
+
+    // Model
+    $courseObj = new Course($db);
+    $categoryObj = new Category($db);
+
+    // Lấy danh mục
+    $categories = $categoryObj->readAll();
+
+    // Lấy input GET (vì ta dùng form method="get")
+    $keyword    = $_GET['q'] ?? '';
+    $categoryId = $_GET['category'] ?? '';
+
+    // Trường hợp 1: Chỉ tìm kiếm theo title
+    // -------------------------------------------------------
+    if (!empty($keyword) && empty($categoryId)) {
+        $courses = $courseObj->searchByTitle($keyword);
+    }
+    // Trường hợp 2: Lọc theo danh mục
+    // -------------------------------------------------------
+    elseif (!empty($categoryId) && empty($keyword)) {
+        $courses = $courseObj->getByCategory($categoryId);
+    }
+    // Trường hợp 3: Có cả keyword + category
+    // -------------------------------------------------------
+    elseif (!empty($keyword) && !empty($categoryId)) {
+        $courses = $courseObj->searchByTitleAndCategory($keyword, $categoryId);
+    }
+    // Trường hợp 4: Không có search → lấy tất cả
+    // -------------------------------------------------------
+    else {
+        $courses = $courseObj->getAll();
+    }
+    // Truyền lại dữ liệu cho View để giữ giá trị đã chọn
+    $filters = [
+        'q' => $keyword,
+        'category_id' => $categoryId
+    ];
+    include VIEW_PATH . '/courses/search.php';
+}
+
+
+
+    // Danh sách khóa học dùng chung
     public function index()
     {
+        if($_SESSION['user']['role'] == 1) {
         $courses = $this->course->getAll();
         require_once VIEW_PATH . '/courses/index.php';
+
+        } else if($_SESSION['user']['role'] == 0) {
+            $courses = $this->course->getAll();      
+            // Kết nối CSDL
+            $db = (new Database())->connect();
+
+            // Lấy danh sách category và truyền vào cho danh mục
+            $categoryObj = new Category($db);
+            $categories = $categoryObj->readAll();
+            include VIEW_PATH . '/courses/index.php';
+        }
     }
 
     // Chi tiết khóa học
@@ -28,9 +116,7 @@ class CourseController {
             echo "Course ID missing!";
             return;
         }
-
         $course = $this->course->get($id);
-
         require_once VIEW_PATH . '/courses/detail.php';
     }
 
