@@ -18,6 +18,29 @@ class LessonController {
         $this->material = new Material($db);
     }
 
+    // -----------------DÀNH CHO HỌC VIÊN-----------
+    public function courseMaterials()
+{
+    $courseId = $_GET['courseId'];
+    $db = (new Database())->connect();
+
+    $lessonModel = new Lesson($db);
+    $materialModel = new Material($db);
+
+    // 1️⃣ Lấy danh sách bài học của khóa
+    $lessons = $lessonModel->getByCourse($courseId);
+
+    // 2️⃣ Với mỗi bài → gắn thêm danh sách tài liệu vào mảng
+    foreach ($lessons as $key => $lesson) {
+        $materials = $materialModel->getByLesson($lesson['id']);
+        $lessons[$key]['materials'] = $materials;   // thêm key mới
+    }
+
+    // 3️⃣ Truyền sang view
+    require_once VIEW_PATH . "/student/course_materials.php";
+}
+
+    //------------------HẾT PHẦN HỌC VIÊN-----------
     // Quản lý bài học theo khóa học
     public function manage()
     {

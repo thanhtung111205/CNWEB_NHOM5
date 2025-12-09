@@ -13,7 +13,14 @@
         <a href="<?= BASE_URL ?>"><i class="fas fa-home"></i> Trang chủ</a>
         <?php if (isset($_SESSION['user'])): ?>
             <?php if ((int)$_SESSION['user']['role'] === 1): ?>
+                <a href="<?= BASE_URL ?>/home/instructorDashboard">🏠 Dashboard</a>
                 <a href="<?= BASE_URL ?>/course/my_courses"><i class="fas fa-book"></i> Khóa học của tôi</a>
+            <?php endif; ?>
+            <?php if ((int)($_SESSION['user']['role'] === 0)): ?>
+                <a href="<?= BASE_URL ?>/home/studentDashboard">🏠 Dashboard</a>
+            <?php endif; ?>
+            <?php if ((int)($_SESSION['user']['role'] === 2)): ?>
+                <a href="<?= BASE_URL ?>/admin/dashboard">🏠 Dashboard</a>
             <?php endif; ?>
             <span><i class="fas fa-user"></i> Xin chào, <?= $_SESSION['user']['name'] ?></span>
             <a href="<?= BASE_URL ?>/auth/logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>

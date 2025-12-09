@@ -107,6 +107,11 @@
                                        onclick="return confirm('Bạn có chắc muốn xóa khóa học này?')">
                                         <i class="fas fa-trash"></i>
                                     </a>
+                                    <a href="<?= BASE_URL ?>/enrollment/studentsProgress?course_id=<?= $course['id'] ?>"
+                                        class="btn-action btn-delete"
+                                        title="Tiến độ">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
