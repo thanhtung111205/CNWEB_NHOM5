@@ -6,10 +6,12 @@
     <title>Online Course</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
 </head>
 <body>
 <header>
     <nav>
+        
         <a href="<?= BASE_URL ?>"><i class="fas fa-home"></i> Trang chủ</a>
         <?php if (isset($_SESSION['user'])): ?>
             <?php if ((int)$_SESSION['user']['role'] === 1): ?>
@@ -21,6 +23,11 @@
             <a href="<?= BASE_URL ?>/auth/loginPage"><i class="fas fa-sign-in-alt"></i> Đăng nhập</a>
             <a href="<?= BASE_URL ?>/auth/registerPage"><i class="fas fa-user-plus"></i> Đăng ký</a>
         <?php endif; ?>
+        
     </nav>
 </header>
-<main>
+
+    
+
+
+    

@@ -1,5 +1,6 @@
 <?php include VIEW_PATH . "/layouts/header.php"; ?>
-
+<?php include VIEW_PATH . '/layouts/sidebar.php'; ?>
+<div class="main-create">
 <div class="container">
     <div class="page-header">
         <h1><i class="fas fa-plus-circle"></i> Thêm khóa học mới</h1>
@@ -73,5 +74,5 @@
         </div>
     </form>
 </div>
-
+</div>
 <?php include VIEW_PATH . "/layouts/footer.php"; ?>

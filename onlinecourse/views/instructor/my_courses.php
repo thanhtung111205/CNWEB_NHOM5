@@ -1,5 +1,7 @@
 <?php include VIEW_PATH . '/layouts/header.php'; ?>
-
+   
+<?php include VIEW_PATH . '/layouts/sidebar.php'; ?>
+<div class="main-courses">
 <div class="container">
     <div class="page-header">
         <h1><i class="fas fa-book-open"></i> Khóa học của tôi</h1>
@@ -125,5 +127,5 @@
         </div>
     <?php endif; ?>
 </div>
-
+</div>
 <?php include VIEW_PATH . '/layouts/footer.php'; ?>
