@@ -119,6 +119,7 @@ if ($controller_name === "AuthController") {
         case "loginPage": $ctl->loginPage(); break;
         case "login": $ctl->login(); break;
         case "logout": $ctl->logout(); break;
+        case "updateUser": $controller->updateUser();break;
         default: echo "Không tìm thấy action trong AuthController"; break;
     }
 

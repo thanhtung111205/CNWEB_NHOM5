@@ -26,6 +26,12 @@ class AuthController {
             exit;
         }
 
+        //Kiểm tra tk bị khóa thì không cho đăng nhập
+        if ((int)$user['role'] == -1) {
+            $_SESSION['error'] = "Tài khoản của bạn đã bị khóa!";
+            header("Location: " . BASE_URL . "/auth/loginPage");
+            exit;
+        }
         // Kiểm tra mật khẩu
         if ($password != $user['password']) {
             $_SESSION['error'] = "Sai mật khẩu!";

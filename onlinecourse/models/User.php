@@ -33,6 +33,41 @@ class User {
     $stmt->bindParam(":role", $role);
 
     return $stmt->execute();
-    
+    }
+    // Lấy tất cả user
+    public function getAllUsers() {
+        $query = "SELECT id, username, email, fullname, role, created_at 
+                  FROM " . $this->table . " 
+                  ORDER BY id DESC";
+       $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Tìm user theo ID (nếu admin cần xem chi tiết)
+    public function findById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id = ? LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Khóa / mở khóa
+    public function updateRole($id, $role) {
+        $query = "UPDATE " . $this->table . " SET role = :role WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':role', $role);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
+    // Kiểm tra tài khoản có bị khóa không
+    public function isLocked($id) {
+        $query = "SELECT role FROM " . $this->table . " WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return ($row['role'] == -1);
     }
 }
