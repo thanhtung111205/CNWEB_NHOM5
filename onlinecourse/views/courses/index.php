@@ -1,48 +1,51 @@
 <?php include VIEW_PATH . "/layouts/header.php"; ?>
+<?php include VIEW_PATH . '/layouts/sidebar.php'; ?>
+<div class="content">
+    <div class="container">
+        <h1>Danh sách khóa học mới nhất</h1>
 
-<div class="container">
-    <h1>Danh sách khóa học mới nhất</h1>
+        <!-- Chỉ hiện tìm kiếm khi học viên đăng nhập -->
+        <?php if (isset($_SESSION['user']) && (int)$_SESSION['user']['role'] === 0): ?>
+            <form method="get" action="<?= BASE_URL ?>/course/search" class="search-filter-box">
+                <input type="text" name="q" placeholder="Tìm kiếm khóa học..."
+                       value="<?= isset($_GET['q']) ? htmlspecialchars($_GET['q']) : '' ?>">
 
-    <!-- Chỉ hiện tìm kiếm khi học viên đăng nhập -->
-    <?php if (isset($_SESSION['user']) && (int)$_SESSION['user']['role'] === 0): ?>
-        <form method="get" action="<?= BASE_URL ?>/course/search" class="search-filter-box">
-            <input type="text" name="q" placeholder="Tìm kiếm khóa học..." 
-                   value="<?= isset($_GET['q']) ? htmlspecialchars($_GET['q']) : '' ?>">
+                <select name="category">
+                    <option value="">-- Tất cả danh mục --</option>
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?= $cat['id']; ?>"
+                            <?= (isset($_GET['category']) && $_GET['category'] == $cat['id']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($cat['name']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
 
-            <select name="category">
-                <option value="">-- Tất cả danh mục --</option>
-                <?php foreach ($categories as $cat): ?>
-                    <option value="<?= $cat['id']; ?>" 
-                        <?= (isset($_GET['category']) && $_GET['category'] == $cat['id']) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($cat['name']); ?>
-                    </option>
+                <button type="submit" class="btn-search">Tìm kiếm</button>
+            </form>
+        <?php endif; ?>
+
+        <?php if (!empty($courses)): ?>
+            <div class="course-list">
+                <?php foreach ($courses as $c): ?>
+                    <div class="course-item">
+                        <?php if (!empty($c['image'])): ?>
+                            <img src="<?= BASE_URL ?>/assets/uploads/courses/<?php echo $c['image']; ?>" alt="<?php echo htmlspecialchars($c['title']); ?>">
+                        <?php else: ?>
+                            <img src="<?= BASE_URL ?>/assets/images/default-course.jpg" alt="<?php echo htmlspecialchars($c['title']); ?>">
+                        <?php endif; ?>
+
+                        <h3><?php echo htmlspecialchars($c['title']); ?></h3>
+                        <p><?php echo htmlspecialchars($c['description']); ?></p>
+                        <a class="detail-btn" href="<?= BASE_URL ?>/course/detail/<?php echo $c['id']; ?>">Xem chi tiết</a>
+                    </div>
                 <?php endforeach; ?>
-            </select>
-
-            <button type="submit" class="btn-search">Tìm kiếm</button>
-        </form>
-    <?php endif; ?>
-
-    <?php if (!empty($courses)): ?>
-        <div class="course-list">
-            <?php foreach ($courses as $c): ?>
-                <div class="course-item">
-                    <?php if (!empty($c['image'])): ?>
-                        <img src="<?= BASE_URL ?>/assets/uploads/courses/<?php echo $c['image']; ?>" alt="<?php echo htmlspecialchars($c['title']); ?>">
-                    <?php else: ?>
-                        <img src="<?= BASE_URL ?>/assets/images/default-course.jpg" alt="<?php echo htmlspecialchars($c['title']); ?>">
-                    <?php endif; ?>
-
-                    <h3><?php echo htmlspecialchars($c['title']); ?></h3>
-                    <p><?php echo htmlspecialchars($c['description']); ?></p>
-                    <a class="detail-btn" href="<?= BASE_URL ?>/course/detail/<?php echo $c['id']; ?>">Xem chi tiết</a>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php else: ?>
-        <p>Chưa có khóa học nào!</p>
-    <?php endif; ?>
+            </div>
+        <?php else: ?>
+            <p>Chưa có khóa học nào!</p>
+        <?php endif; ?>
+    </div>
 </div>
+
 <style>
     /* Khung tìm kiếm + lọc */
 .search-filter-box {
@@ -130,6 +133,14 @@
 .detail-btn:hover {
     background: #27ae60;
 }
-
+/* sửa css */
+.content {
+    margin-left: 250px;   /* đẩy nội dung qua phải theo sidebar */
+    padding: 20px;
+    margin-top: 70px;     /* để tránh header */
+}
+h1{
+    text-align: center;
+}
 </style>
 <?php include VIEW_PATH . "/layouts/footer.php"; ?>

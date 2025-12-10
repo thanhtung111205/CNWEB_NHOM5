@@ -1,4 +1,7 @@
 <?php include VIEW_PATH . "/layouts/header.php"; ?>
+<?php include VIEW_PATH . '/layouts/sidebar.php'; ?>
+<div class="main-content">
+
 <h2>🔎 Kết quả tìm kiếm khóa học</h2>
 
 <form method="get" action="<?= BASE_URL ?>/course/search" style="margin-bottom:20px">
@@ -42,12 +45,14 @@
 
             </div>
         <?php endforeach; ?>
-    </div>
+        </div>
     <?php else: ?>
         <p>Không tìm thấy khóa học nào phù hợp.</p>
     <?php endif; ?>
-
 </ul>
+
+</div>
+
 <style>
 /* ======= SEARCH BAR ======= */
 .search-box {
@@ -132,6 +137,46 @@ form input[type="text"] {
         background: #219150;
     }
 
+/* ĐẨY TOÀN BỘ NỘI DUNG XUỐNG DƯỚI HEADER */
+.main-content {
+    margin-top: 80px;   /* chỉnh theo chiều cao header */
+    padding: 20px;
+}
+
+/* Bỏ gạch dưới tất cả thẻ a */
+a {
+    text-decoration: none;
+}
+
+/* Course list */
+.courses {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.course-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    background: #fafafa;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Nút Xem chi tiết */
+.detail-btn {
+    display: inline-block;
+    background: #6a5de8;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.detail-btn:hover {
+    background: #5848d6;
+}
 
 </style>
 <?php include VIEW_PATH . "/layouts/footer.php"; ?>
