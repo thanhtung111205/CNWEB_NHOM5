@@ -10,9 +10,10 @@
 </head>
 <body>
 <header>
-    <nav>
+    <nav class="menu-center" >
         
-        <a href="<?= BASE_URL ?>"><i class="fas fa-home"></i> Trang chủ</a>
+        <a href="<?= BASE_URL ?>">
+        <img src="<?= BASE_URL ?>/assets/uploads/avatar/logo_trangchu.jpg" alt="Logo" style="height: 30px; vertical-align: middle; margin-right: 8px;border-radius: 50% ">Trang chủ</a>
         <?php if (isset($_SESSION['user'])): ?>
             <?php if ((int)$_SESSION['user']['role'] === 1): ?>
                 <a href="<?= BASE_URL ?>/course/my_courses"><i class="fas fa-book"></i> Khóa học của tôi</a>

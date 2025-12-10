@@ -132,4 +132,11 @@ if ($controller_name === "AuthController") {
 */
 http_response_code(404);
 echo "404 Not Found: Controller '{$controller_name}.php' not found.";
+
+$parts = explode('/', $request_uri);
+
+$controller_name = !empty($parts[0]) ? ucfirst($parts[0]) . 'Controller' : 'HomeController';
+$action_name = $parts[1] ?? 'index';
+
+
 ?>

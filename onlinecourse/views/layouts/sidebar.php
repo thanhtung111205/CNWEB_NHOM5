@@ -1,32 +1,50 @@
 <div class="sidebar">
     <div class="user-box">
         <h3><strong><?= $_SESSION['user']['name'] ?></strong></h3>
-        <span>Giảng viên</span>
+
+        <span>
+            <?php
+                if ($_SESSION['user']['role'] == 2) echo "Admin";
+                elseif ($_SESSION['user']['role'] == 1) echo "Giảng viên";
+                else echo "Học viên";
+            ?>
+        </span>
     </div>
 
     <ul class="menu">
-        <li>
-            <a href="<?= BASE_URL ?>/course/dashboard"><i class="icon">📊</i> Dashboard</a>
-        </li>
 
-        <li>
-            <a href="<?= BASE_URL ?>/course/my_courses"><i class="icon">📚</i> Khóa Học Của Tôi</a>
-        </li>
+        <!-- Mục dành cho GIẢNG VIÊN -->
+        <?php if ($_SESSION['user']['role'] == 1): ?>
+            <li>
+                <a href="<?= BASE_URL ?>/course/dashboard"><i class="icon">📊</i> Dashboard</a>
+            </li>
+            <li>
+                <a href="<?= BASE_URL ?>/course/my_courses"><i class="icon">📚</i> Khóa Học Của Tôi</a>
+            </li>
+            <li>
+                <a href="<?= BASE_URL ?>/course/create"><i class="icon">➕</i> Tạo Khóa Học Mới</a>
+            </li>
+        <?php endif; ?>
 
-        <li>
-            <a href="<?= BASE_URL ?>/course/create"><i class="icon">➕</i> Tạo Khóa Học Mới</a>
-        </li>
 
-        <p class="menu-title">QUẢN LÝ</p>
+        <!-- Mục dành cho ADMIN -->
+        <?php if ($_SESSION['user']['role'] == 2): ?>
+            <li>
+                <a href="<?= BASE_URL ?>/admin/categories"><i class="icon">👥</i> Quản lý danh mục</a>
+            </li>
+            <li>
+                <a href="<?= BASE_URL ?>/admin/reports"><i class="icon">📈</i> Thống kê hệ thống</a>
+            </li>
+        <?php endif; ?>
 
-        <li>
-            <a href="<?= BASE_URL ?>/student/list"><i class="icon">👥</i> Danh Sách Học Viên</a>
-        </li>
 
-        <p class="menu-title">TÀI KHOẢN</p>
+        <!-- Mục dành cho HỌC VIÊN -->
+        <?php if ($_SESSION['user']['role'] == 3): ?>
+            <li>
+                <a href="<?= BASE_URL ?>/courses/enrolled"><i class="icon">🎓</i> Khóa học đã đăng ký</a>
 
-        <li>
-            <a href="<?= BASE_URL ?>/auth/logout"><i class="icon">🚪</i> Đăng Xuất</a>
-        </li>
+            </li>
+        <?php endif; ?>
+
     </ul>
 </div>
