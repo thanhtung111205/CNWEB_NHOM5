@@ -8,11 +8,24 @@
     <p class="no-lesson-text">Chưa có bài học nào.</p>
 
 <?php else: ?>
+
 <div class="lesson-wrapper">
     <?php foreach ($lessons as $lesson): ?>
 
         <div class="lesson-box">
             <h3 class="lesson-name">📘 <?= htmlspecialchars($lesson['title']) ?></h3>
+              <!-- Nút xem bài học -->
+            <button 
+                class="lesson-video-btn btn btn-primary" 
+                data-video="<?= htmlspecialchars($lesson['video_url']) ?>"
+                data-lesson-id="<?= $lesson['id'] ?>"
+                data-course-id="<?= $courseId ?>" >
+                🎬 Xem bài
+            </button>
+            <!-- Video sẽ xuất hiện tại đây -->
+            <div class="video-container" style="display:none; margin-top:15px;">
+                <iframe width="100%" height="320" frameborder="0" allowfullscreen></iframe>
+            </div>
 
             <hr class="lesson-divider">
 
@@ -23,7 +36,7 @@
                     <ul class="material-list">
                         <?php foreach ($lesson['materials'] as $m): ?>
                             <li class="material-item">
-                                <span>📄 <?= htmlspecialchars($m['filename']) ?></span>
+                                <span>📄 <?= htmlspecialchars($m['filename']) ?></span>                                
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -45,7 +58,54 @@
     </div>
 </a>
 
-</div> <!-- end .content -->
+</div> 
+<script>
+document.querySelectorAll(".lesson-video-btn").forEach(button => {
+    button.addEventListener("click", function () {
+        
+        // Lấy dữ liệu từ button
+        const videoId = this.dataset.video;
+        const lessonId = this.dataset.lessonId;
+        const courseId = this.dataset.courseId;
+
+        // Lấy video-container của bài học hiện tại
+        const container = this.parentElement.querySelector(".video-container");
+        const iframe = container.querySelector("iframe");
+
+        // Gán link YouTube
+        iframe.src = "https://www.youtube.com/embed/" + videoId;
+
+        // Hiện video
+        container.style.display = "block";
+
+        // Cuộn xuống
+        container.scrollIntoView({ behavior: "smooth" });
+
+        // 👈 Cập nhật tiến độ luôn khi user mở bài
+        updateProgress(lessonId, courseId);
+    });
+});
+
+
+function updateProgress(lessonId, courseId) {
+    fetch("<?= BASE_URL ?>/enrollment/updateProgressAjax", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            lesson_id: lessonId,
+            course_id: courseId
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Tiến độ đã cập nhật:", data);
+    })
+    .catch(err => console.error("Lỗi:", err));
+}
+</script>
+
 <style>
     /* Nội dung hiển thị bên phải sidebar */
     /* ===== NỘI DUNG CHUNG (đã có sidebar) ===== */
@@ -133,13 +193,22 @@
     border-radius: 6px;
     border: none;
     cursor: pointer;
-    float: right;
-    margin-right: 70px;
+    margin-left: 197px;
 }
 
 .btn-back:hover {
     background: #5848d6;
 }
+/*xem bài học*/ 
+.video-container {
+    margin-top: 15px;
+    display: none;
+}
 
+.video-container iframe {
+    width: 100%;
+    height: 320px;
+    border-radius: 10px;
+}
 </style>
 <?php include VIEW_PATH . "/layouts/footer.php"; ?>

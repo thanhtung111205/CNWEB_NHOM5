@@ -75,6 +75,7 @@
         </div>
     </form>
 </div>
+<style>
     /* Container chính bên phải sidebar */
 .container {
     margin-left: 250px; /* bằng với chiều rộng sidebar */

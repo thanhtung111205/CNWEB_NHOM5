@@ -44,6 +44,9 @@
         <!-- Mục dành cho HỌC VIÊN -->
         <?php if ($_SESSION['user']['role'] == 0): ?>
             <li>
+                <a href="<?= BASE_URL ?>/home/studentDashboard">🏠 Dashboard</a>    
+            </li>
+            <li>
                 <a href="<?= BASE_URL ?>/course/index">📚 Xem danh sách khóa học</a>    
             </li>
             <li>

@@ -93,5 +93,13 @@ class Enrollment {
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$progress, $courseId, $studentId]);
     }
+    public function getProgressForUpdate($courseId, $studentId) {
+    $sql = "SELECT progress FROM enrollments 
+            WHERE course_id = ? AND student_id = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$courseId, $studentId]);
+    return (int)$stmt->fetchColumn();
+}
+
 }
 ?>
