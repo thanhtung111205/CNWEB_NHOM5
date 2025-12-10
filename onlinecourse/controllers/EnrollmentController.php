@@ -125,5 +125,40 @@ class EnrollmentController {
     include VIEW_PATH . "/instructor/students/list.php";
 }
 
+    // AJAX cập nhật tiến độ, chỉ nhận request – xử lý – trả JSON – rồi kết thúc
+    public function updateProgressAjax() {
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    $lessonId  = $data['lesson_id'];
+    $courseId  = $data['course_id'];
+    $studentId = $_SESSION['user']['id'];
+
+    // Tăng mỗi lần xem +10% (hoặc tùy bạn)
+    $increase = 10;
+
+    $model = new Enrollment();
+    $current = $model->getProgressForUpdate($courseId, $studentId);
+
+    $newProgress = min(100, $current + $increase);
+
+    $model->updateProgress($courseId, $studentId, $newProgress);
+
+    echo json_encode([
+        "status" => "success",
+        "progress" => $newProgress
+    ]);
+
+    exit;
+}
+/*public function updateProgressAjax()
+là một API (controller action kiểu AJAX) dùng để:
+
+Nhận dữ liệu do JavaScript gửi (lesson_id, course_id)
+
+Tính tiến độ
+
+Ghi vào database
+
+Trả JSON về cho JS*/ 
 }
 ?>

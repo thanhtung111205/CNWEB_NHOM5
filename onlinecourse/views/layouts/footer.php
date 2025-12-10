@@ -5,17 +5,16 @@
             <!-- Col 1 -->
             <div class="footer-col">
                 <div class="footer-logo">
-                    <span>EduPress</span>
+                    <span>FiveStar</span>
                 </div>
                 <p class="footer-desc">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua.
+                    Nền tảng học tập trực tuyến hàng đầu, cung cấp các khóa học chất lượng cao từ các giảng viên uy tín trên toàn thế giới.
                 </p>
             </div>
 
             <!-- Col 2 -->
             <div class="footer-col">
-                <h3 class="footer-title">GET HELP</h3>
+                <h3 class="footer-title">HỖ TRỢ</h3>
                 <ul class="footer-links">
                     <li><a href="#">Contact Us</a></li>
                     <li><a href="#">Latest Articles</a></li>
@@ -28,8 +27,8 @@
                 <h3 class="footer-title">CONTACT US</h3>
                 <ul class="footer-contact">
                     <li>Address: Hà Nội</li>
-                    <li>Tel: + (123) 2500-567-8988</li>
-                    <li>Mail: supportlms@gmail.com</li>
+                    <li>Tel: + (84) 2500-567-898</li>
+                    <li>Mail: thanhtung@gmail.com</li>
                 </ul>
             </div>
 
@@ -38,7 +37,7 @@
         <hr class="footer-line">
 
         <p class="footer-copy">
-            Copyright © 2025 LearnPress LMS | Powered by ThimPress
+            Copyright © 2025 Learning Course | Powered by Fivestar
         </p>
     </div>
 </footer>
@@ -72,9 +71,10 @@
     .footer-logo {
         display: flex;
         align-items: center;
-        font-size: 20px;
+        font-size: 30px;
         font-weight: bold;
         margin-bottom: 15px;
+        
     }
     .footer-logo img {
         width: 28px;
