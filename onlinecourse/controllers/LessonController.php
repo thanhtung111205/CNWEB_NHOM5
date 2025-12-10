@@ -69,7 +69,7 @@ class LessonController {
         foreach ($lessons as &$lesson) {
             $lesson['materials'] = $this->material->getByLesson($lesson['id']);
         }
-
+        unset($lesson); // QUAN TRỌNG: Hủy reference để tránh bug
         require_once VIEW_PATH . '/instructor/lessons/manage.php';
     }
 

@@ -1,7 +1,8 @@
 <?php include VIEW_PATH . "/layouts/header.php"; ?>
-<?php include VIEW_PATH . "/layouts/sidebar.php"; ?>
+<?php include VIEW_PATH . "/layouts/header.php"; ?>
+<?php include VIEW_PATH . '/layouts/sidebar.php'; ?>
 
-<div class="container">
+<div class="student-main">
     <div class="page-header">
         <h1><i class="fas fa-plus-circle"></i> Thêm khóa học mới</h1>
         <a href="<?= BASE_URL ?>/course/my_courses" class="btn">
@@ -74,7 +75,6 @@
         </div>
     </form>
 </div>
-<style>
     /* Container chính bên phải sidebar */
 .container {
     margin-left: 250px; /* bằng với chiều rộng sidebar */

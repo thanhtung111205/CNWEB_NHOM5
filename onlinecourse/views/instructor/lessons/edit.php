@@ -1,6 +1,7 @@
 <?php include VIEW_PATH . "/layouts/header.php"; ?>
+<?php include VIEW_PATH . '/layouts/sidebar.php'; ?>
 
-<div class="container">
+<div class="student-main">
     <div class="page-header">
         <h1><i class="fas fa-edit"></i> Chỉnh sửa bài học</h1>
         <a href="<?= BASE_URL ?>/lesson/manage?course_id=<?= $lesson['course_id'] ?>" class="btn btn-secondary">

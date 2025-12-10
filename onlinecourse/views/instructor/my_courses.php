@@ -1,6 +1,7 @@
 <?php include VIEW_PATH . '/layouts/header.php'; ?>
 <?php include VIEW_PATH . '/layouts/sidebar.php'; ?>
-<div class="container">
+
+<div class="student-main">
     <div class="page-header">
         <h1><i class="fas fa-book-open"></i> Khóa học của tôi</h1>
         <a href="<?= BASE_URL ?>/course/create" class="btn btn-success">
@@ -130,7 +131,6 @@
         </div>
     <?php endif; ?>
 </div>
-<style>
     
 </style>
 <?php include VIEW_PATH . '/layouts/footer.php'; ?>

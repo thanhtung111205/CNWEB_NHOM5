@@ -1080,6 +1080,210 @@ table tr:hover {
     background: #f7f9fa;
 }
 
+/* ============================================
+   INSTRUCTOR SIDEBAR - RESPONSIVE
+   ============================================ */
+
+.instructor-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    overflow-y: auto;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar-header {
+    padding: 30px 20px;
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-header i {
+    font-size: 32px;
+    color: #3498db;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.sidebar-nav {
+    padding: 20px 0;
+}
+
+.sidebar-nav .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 25px;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-nav .nav-item:hover {
+    background: rgba(52, 152, 219, 0.1);
+    color: white;
+    border-left-color: #3498db;
+}
+
+.sidebar-nav .nav-item.active {
+    background: rgba(52, 152, 219, 0.2);
+    color: white;
+    border-left-color: #3498db;
+    font-weight: 600;
+}
+
+.sidebar-nav .nav-item i {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-info i {
+    font-size: 40px;
+    color: #3498db;
+}
+
+.user-info strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.user-info small {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+}
+
+/* Main content with sidebar */
+.instructor-layout {
+    margin-left: 280px;
+    min-height: 100vh;
+    background: #f5f5f5;
+}
+
+.instructor-layout .container {
+    max-width: 100%;
+    padding: 30px;
+}
+
+/* Sidebar toggle button for mobile */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+    background: #34495e;
+    transform: scale(1.05);
+}
+
+.sidebar-toggle i {
+    font-size: 20px;
+}
+
+/* Overlay for mobile */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .instructor-sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .instructor-sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .instructor-layout {
+        margin-left: 0;
+    }
+    
+    .sidebar-toggle {
+        display: block;
+    }
+    
+    .instructor-layout .container {
+        padding: 80px 20px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .instructor-sidebar {
+        width: 250px;
+    }
+    
+    .sidebar-header {
+        padding: 20px 15px;
+    }
+    
+    .sidebar-header h3 {
+        font-size: 18px;
+    }
+    
+    .sidebar-nav .nav-item {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
 
 
 

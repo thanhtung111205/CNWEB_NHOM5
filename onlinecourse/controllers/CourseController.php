@@ -149,7 +149,7 @@ class CourseController {
         require_once MODEL_PATH . '/Category.php';
         $db = (new Database())->connect();
         $categoryModel = new Category($db);
-        $categories = $categoryModel->readAll()->fetchAll(PDO::FETCH_ASSOC);
+        $categories = $categoryModel->readAll(); // readAll() đã trả về array rồi
 
         require_once VIEW_PATH . '/instructor/course/create.php';
     }
@@ -298,7 +298,7 @@ class CourseController {
         require_once MODEL_PATH . '/Category.php';
         $db = (new Database())->connect();
         $categoryModel = new Category($db);
-        $categories = $categoryModel->readAll()->fetchAll(PDO::FETCH_ASSOC);
+        $categories = $categoryModel->readAll(); // readAll() đã trả về array rồi
 
         require_once VIEW_PATH . '/instructor/course/edit.php';
     }
