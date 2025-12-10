@@ -1,76 +1,58 @@
 <?php include VIEW_PATH . '/layouts/header.php'; ?>
-<style>
-    .student-container {
-        max-width: 900px;
-        margin: 30px auto;
-        padding: 20px;
-    }
+<?php include VIEW_PATH . '/layouts/sidebar.php'; ?>
 
-    .student-title {
-        text-align: center;
-        color: #27ae60;
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
+<div class="student-content">
+    <div class="student-box">
+        <h2>🎓 Trang học viên</h2>
+        <p class="sub-text">Chọn các chức năng bên trái để bắt đầu</p>
 
-    .student-welcome {
-        text-align: center;
-        font-size: 18px;
-        color: #2d3436;
-        margin-bottom: 25px;
-    }
-
-    .navigation-card {
-        background: #ffffff;
-        border: 1px solid #dfe6e9;
-        border-radius: 12px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-        padding: 20px;
-        transition: 0.3s ease;
-    }
-
-    .nav-title {
-        text-align: center;
-        font-size: 20px;
-        color: #27ae60;
-        margin-bottom: 20px;
-        font-weight: 600;
-    }
-
-    .nav-links {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .nav-links a {
-        padding: 12px 15px;
-        text-decoration: none;
-        background: #27ae60;
-        color: white;
-        border-radius: 10px;
-        font-size: 15px;
-        transition: 0.25s;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 500;
-    }
-
-    .nav-links a:hover {
-        background: #219150;
-        transform: translateX(4px);
-    }
-</style>
-<div class="navigation-card">
-        <h3 class="nav-title">🏠 Dashboard Học Viên</h3>
-
-        <div class="nav-links">
-            <a href="<?= BASE_URL ?>/home/studentDashboard">🏠 Dashboard</a>
-            <a href="<?= BASE_URL ?>/course/index">📚 Xem danh sách khóa học</a>
-            <a href="<?= BASE_URL ?>/enrollment/myCourses">🎓 Khóa học của tôi</a>
-            <a href="<?= BASE_URL ?>/enrollment/progressList">📊 Tiến độ học tập</a>
         </div>
+    </div>
 </div>
+<style>
+   /* --- KHÔNG BỊ ĐÈ BỞI SIDEBAR --- */
+.student-content {
+    margin-left: 250px;          
+    padding: 40px 50px;
+    background: #ffffff;         /* Nền trắng (xóa nền tím) */
+    min-height: 100vh;
+}
 
+
+/* --- KHUNG BOX CHÍNH --- */
+.student-box {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    max-width: 900px;
+    animation: fadeIn 0.4s ease;
+    border-left: 6px solid #8c36ff; /* Viền tím đẹp */
+    border-top: 5px solid #b47cff;  /* Thanh tiêu đề tím đậm */
+}
+
+/* --- TIÊU ĐỀ --- */
+.student-box h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #7a23d8;     /* Tím đậm */
+    margin-bottom: 10px;
+}
+
+/* --- SUB TEXT --- */
+.sub-text {
+    font-size: 18px;
+    color: #4b177b;     /* tím nhẹ */
+    margin-top: 5px;
+}
+
+
+/* --- Hiệu ứng fade --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+</style>
 <?php include VIEW_PATH . '/layouts/footer.php'; ?>

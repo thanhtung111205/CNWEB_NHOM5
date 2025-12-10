@@ -1,5 +1,5 @@
 <?php include VIEW_PATH . '/layouts/header.php'; ?>
-
+<?php include VIEW_PATH . '/layouts/sidebar.php'; ?>
 <div class="container">
     <div class="dashboard-header">
         <div>
@@ -109,5 +109,7 @@
         </div>
     <?php endif; ?>
 </div>
+<style>
 
+</style>
 <?php include VIEW_PATH . '/layouts/footer.php'; ?>
