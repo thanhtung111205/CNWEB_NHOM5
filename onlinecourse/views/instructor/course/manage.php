@@ -1,5 +1,24 @@
 <?php include VIEW_PATH . "/layouts/header.php"; ?>
 
+<style>
+    /* Đảm bảo các nút hành động không bị dính liền và có khoảng cách */
+    .action-buttons-custom .btn {
+        margin-right: 5px; /* Khoảng cách giữa các nút */
+        margin-bottom: 5px; /* Khoảng cách nếu xuống dòng */
+        padding: 6px 10px;
+        font-size: 0.85rem; /* Kích thước chữ nhỏ hơn */
+        display: inline-flex;
+        align-items: center;
+    }
+    .action-buttons-custom .btn i {
+        margin-right: 5px; /* Khoảng cách giữa icon và chữ */
+    }
+    /* Đảm bảo bảng căn giữa nội dung */
+    .table.align-middle > :not(caption) > * > * {
+        vertical-align: middle;
+    }
+</style>
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Khóa Học Của Tôi</h2>
@@ -28,7 +47,7 @@
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover table-bordered align-middle">
                 <thead class="table-light">
                     <tr>
                         <th width="5%">ID</th>
@@ -48,7 +67,7 @@
                             <td>
                                 <?php if (!empty($c['image'])): ?>
                                     <img src="<?= BASE_URL ?>/assets/uploads/courses/<?= htmlspecialchars($c['image']) ?>" 
-                                         alt="Course image" class="img-thumbnail" style="max-width: 80px;">
+                                        alt="Course image" class="img-thumbnail" style="max-width: 80px;">
                                 <?php else: ?>
                                     <span class="text-muted">Không có ảnh</span>
                                 <?php endif; ?>
@@ -59,7 +78,21 @@
                                 <small class="text-muted"><?= mb_substr(htmlspecialchars($c['description']), 0, 60) ?>...</small>
                             </td>
                             <td>
-                                <span class="badge bg-<?= $c['level'] == 'Beginner' ? 'success' : ($c['level'] == 'Intermediate' ? 'warning' : 'danger') ?>">
+                                <?php
+                                    $level_class = 'primary';
+                                    switch ($c['level']) {
+                                        case 'Beginner':
+                                            $level_class = 'success';
+                                            break;
+                                        case 'Intermediate':
+                                            $level_class = 'warning text-dark';
+                                            break;
+                                        case 'Advanced':
+                                            $level_class = 'danger';
+                                            break;
+                                    }
+                                ?>
+                                <span class="badge bg-<?= $level_class ?>">
                                     <?= htmlspecialchars($c['level']) ?>
                                 </span>
                             </td>
@@ -67,23 +100,23 @@
                             <td><?= $c['duration_weeks'] ?> tuần</td>
                             <td><?= date('d/m/Y H:i', strtotime($c['created_at'])) ?></td>
                             <td>
-                                <div class="btn-group-vertical btn-group-sm" role="group">
+                                <div class="action-buttons-custom">
                                     <a href="<?= BASE_URL ?>/lesson/manage?course_id=<?= $c['id'] ?>" 
-                                       class="btn btn-info btn-sm" title="Quản lý bài học">
+                                        class="btn btn-warning btn-sm text-dark" title="Quản lý bài học">
                                         <i class="bi bi-book"></i> Bài học
                                     </a>
                                     <a href="<?= BASE_URL ?>/course/edit?id=<?= $c['id'] ?>" 
-                                       class="btn btn-warning btn-sm" title="Chỉnh sửa">
+                                        class="btn btn-primary btn-sm" title="Chỉnh sửa">
                                         <i class="bi bi-pencil"></i> Sửa
                                     </a>
                                     <a href="<?= BASE_URL ?>/course/delete?id=<?= $c['id'] ?>" 
-                                       class="btn btn-danger btn-sm" 
-                                       title="Xóa khóa học"
-                                       onclick="return confirm('Bạn có chắc muốn xóa khóa học này? Tất cả bài học và tài liệu liên quan cũng sẽ bị xóa!')">
+                                        class="btn btn-danger btn-sm" 
+                                        title="Xóa khóa học"
+                                        onclick="return confirm('Bạn có chắc muốn xóa khóa học này? Tất cả bài học và tài liệu liên quan cũng sẽ bị xóa!')">
                                         <i class="bi bi-trash"></i> Xóa
                                     </a>
                                 </div>
-                            </td>
+                                </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -99,4 +132,3 @@
 </div>
 
 <?php include VIEW_PATH . "/layouts/footer.php"; ?>
-
