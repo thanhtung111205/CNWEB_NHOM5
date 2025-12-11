@@ -1,11 +1,16 @@
+<?php if (!isset($_SESSION['user'])): ?>
+    <!-- Nếu chưa đăng nhập, không hiển thị sidebar -->
+    <script>window.location.href = '<?= BASE_URL ?>/auth/loginPage';</script>
+<?php else: ?>
 <div class="sidebar">
     <div class="user-box">
-        <h3><strong><?= $_SESSION['user']['name'] ?></strong></h3>
+        <h3><strong><?= $_SESSION['user']['name'] ?? 'Guest' ?></strong></h3>
 
         <span>
             <?php
-                if ($_SESSION['user']['role'] == 2) echo "Admin";
-                elseif ($_SESSION['user']['role'] == 1) echo "Giảng viên";
+                $role = $_SESSION['user']['role'] ?? 0;
+                if ($role == 2) echo "Admin";
+                elseif ($role == 1) echo "Giảng viên";
                 else echo "Học viên";
             ?>
         </span>
@@ -14,7 +19,7 @@
     <ul class="menu">
 
         <!-- Mục dành cho GIẢNG VIÊN -->
-        <?php if ($_SESSION['user']['role'] == 1): ?>
+        <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] == 1): ?>
             <li>
                 <a href="<?= BASE_URL ?>/course/dashboard"><i class="icon">📊</i> Dashboard</a>
             </li>
@@ -28,7 +33,7 @@
 
 
         <!-- Mục dành cho ADMIN -->
-        <?php if ($_SESSION['user']['role'] == 2): ?>
+        <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] == 2): ?>
             <li>
                 <a href="<?= BASE_URL ?>/admin/manageUsers"><i class="icon">👥</i> Quản lý người dùng</a>
             </li>
@@ -42,7 +47,7 @@
 
 
         <!-- Mục dành cho HỌC VIÊN -->
-        <?php if ($_SESSION['user']['role'] == 0): ?>
+        <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] == 0): ?>
             <li>
                 <a href="<?= BASE_URL ?>/home/studentDashboard">🏠 Dashboard</a>    
             </li>
@@ -59,3 +64,4 @@
 
     </ul>
 </div>
+<?php endif; ?>

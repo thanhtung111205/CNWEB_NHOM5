@@ -83,7 +83,10 @@ class CourseController {
         $course = $this->course->get($id);
         // Kiểm tra học viên đã đăng ký chưa 
         $enrollmentModel = new Enrollment();
-        $isEnrolled = $enrollmentModel->isEnrolled($_SESSION['user']['id'], $id);
+        $isEnrolled = false;
+        if (isset($_SESSION['user']) && isset($_SESSION['user']['id'])) {
+            $isEnrolled = $enrollmentModel->isEnrolled($_SESSION['user']['id'], $id);
+        }
 
         require_once VIEW_PATH . '/courses/detail.php';
     }
