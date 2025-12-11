@@ -17,7 +17,7 @@
               <!-- Nút xem bài học -->
             <button 
                 class="lesson-video-btn btn btn-primary" 
-                data-video="<?= htmlspecialchars($lesson['video_url']) ?>"
+                data-video="<?= htmlspecialchars($lesson['video_url'], ENT_QUOTES) ?>"
                 data-lesson-id="<?= $lesson['id'] ?>"
                 data-course-id="<?= $courseId ?>" >
                 🎬 Xem bài
@@ -36,7 +36,9 @@
                     <ul class="material-list">
                         <?php foreach ($lesson['materials'] as $m): ?>
                             <li class="material-item">
-                                <span>📄 <?= htmlspecialchars($m['filename']) ?></span>                                
+                                <a href="<?= htmlspecialchars($m['file_path']) ?>" target="_blank">
+                                    📄 <?= htmlspecialchars($m['filename']) ?>
+                                </a>
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -59,29 +61,34 @@
 </a>
 
 </div> 
+<!-- Xử lý Video bài giảng -->
 <script>
 document.querySelectorAll(".lesson-video-btn").forEach(button => {
     button.addEventListener("click", function () {
-        
-        // Lấy dữ liệu từ button
-        const videoId = this.dataset.video;
+        const videoUrl = this.dataset.video; // lấy từ DB
         const lessonId = this.dataset.lessonId;
         const courseId = this.dataset.courseId;
 
-        // Lấy video-container của bài học hiện tại
         const container = this.parentElement.querySelector(".video-container");
         const iframe = container.querySelector("iframe");
 
-        // Gán link YouTube
-        iframe.src = "https://www.youtube.com/embed/" + videoId;
+        if (!videoUrl) {
+            alert("Video chưa có link!");
+            return;
+        }
 
-        // Hiện video
+        // Chuyển watch?v= sang embed/
+        let embedUrl = videoUrl;
+        if (videoUrl.includes("watch?v=")) {
+            embedUrl = videoUrl.replace("watch?v=", "embed/");
+            // Xử lý thêm nếu link có &list= hoặc &t=... (xóa query string ngoài embed)
+            embedUrl = embedUrl.split('&')[0];
+        }
+
+        iframe.src = embedUrl;
         container.style.display = "block";
-
-        // Cuộn xuống
         container.scrollIntoView({ behavior: "smooth" });
 
-        // 👈 Cập nhật tiến độ luôn khi user mở bài
         updateProgress(lessonId, courseId);
     });
 });

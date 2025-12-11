@@ -29,7 +29,7 @@
             <?php endif; ?>
 
             <div class="back-btn-wrap">
-                <a href="<?= BASE_URL ?>/enrollment/myCourses">
+                <a href="<?= BASE_URL ?>/course/index">
                     <button class="btn-back">Quay lại</button>
                 </a>
             </div>
@@ -87,7 +87,7 @@
 /* Wrap nút quay lại */
 .course-detail .back-btn-wrap {
     display: flex;
-    justify-content: flex-end; /* ĐẨY SANG PHẢI */
+    justify-content: flex-start; /* ĐẨY SANG PHẢI */
     margin-top: 20px;
 }
 
